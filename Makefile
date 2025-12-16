@@ -30,21 +30,21 @@ base:
 claude-code: base
 	@echo "Building claude-code"
 	$(CONTAINER_ENGINE) build \
-		--no-cache
+		--no-cache \
 		-t claude-code \
 		-f claude-code/Dockerfile claude-code
 
 openai-codex: base
 	@echo "Building openai-codex"
 	$(CONTAINER_ENGINE) build \
-		--no-cache
+		--no-cache \
 		-t openai-codex \
 		-f openai-codex/Dockerfile openai-codex
 
 open-code: base
 	@echo "Building open-code"
 	$(CONTAINER_ENGINE) build \
-		--no-cache
+		--no-cache \
 		-t open-code \
 		-f open-code/Dockerfile open-code
 
