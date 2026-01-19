@@ -16,7 +16,7 @@ ifeq ($(CONTAINER_ENGINE),)
 $(error No container engine (podman/docker) found in PATH)
 endif
 
-all: base claude-code openai-codex
+all: base claude-code openai-codex open-code
 
 base:
 	@echo "Building base image"
