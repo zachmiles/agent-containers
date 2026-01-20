@@ -39,13 +39,23 @@ the container as below.
 Note: If you're running rootless `podman` you'll need to add `--userns=keep-id`
 to these instructions.
 
-Note: See the rep [README](../README.md) for some nice shell functions for
+Note: See the repo [README](../README.md) for some nice shell functions for
 launching these containers.
 
 ```bash
+#!/usr/bin/env bash
+
+PROJ="$(basename "$(pwd)")"
+NAME="openai-codex-${PROJ}"
+
+# Remove any existing container with this name
+docker rm -f "$NAME" 2>/dev/null || true
+
 docker run -it --rm \
+  --name "$NAME" \
+  -v /etc/localtime:/etc/localtime:ro \
   -e OPENAI_API_KEY \
-  -v ${HOME}/.config/codex:/home/codeuser/.codex:rw \
+  -v ${HOME}/.codex:/home/node/.codex:rw \
   -v $(pwd):/app:rw \
   openai-codex
 ```

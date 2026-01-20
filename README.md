@@ -99,15 +99,66 @@ function __ai_container_launcher() {
   echo $LAUNCHER
 }
 
-function claude() {
-  eval "$(__ai_container_launcher) --tty --interactive -v ${HOME}/.config/claude/claude.json:/home/codeuser/.claude.json:rw \
-    -v ${HOME}/.config/claude:/home/codeuser/.claude:rw \
+function cclaude() {
+  local PROJ="$(basename "$(pwd)")"
+  local NAME="claude-code-${PROJ}"
+  docker rm -f "$NAME" 2>/dev/null || true
+  eval "$(__ai_container_launcher) --rm --tty --interactive \
+    --name \"$NAME\" \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v ${HOME}/.claude.json:/home/node/.claude.json:rw \
+    -v ${HOME}/.claude:/home/node/.claude:rw \
     -v $(pwd):/app:rw \
     claude-code $@"
 }
 
-function codex() {
-  eval "$(__ai_container_launcher) --rm --tty --interactive -e OPENAI_API_KEY -v $(pwd):/app:rw openai-codex $@"
+function ccodex() {
+  local PROJ="$(basename "$(pwd)")"
+  local NAME="openai-codex-${PROJ}"
+  docker rm -f "$NAME" 2>/dev/null || true
+  eval "$(__ai_container_launcher) --rm --tty --interactive \
+    --name \"$NAME\" \
+    -v /etc/localtime:/etc/localtime:ro \
+    -e OPENAI_API_KEY \
+    -v ${HOME}/.codex:/home/node/.codex:rw \
+    -v $(pwd):/app:rw \
+    openai-codex $@"
+}
+
+function copencode() {
+  local PROJ="$(basename "$(pwd)")"
+  local NAME="opencode-${PROJ}"
+  docker rm -f "$NAME" 2>/dev/null || true
+  eval "$(__ai_container_launcher) --rm --tty --interactive \
+    --name \"$NAME\" \
+    -v /etc/localtime:/etc/localtime:ro \
+    --add-host=host.docker.internal:host-gateway \
+    -v $HOME/.local/state/opencode:/home/node/.local/state/opencode \
+    -v $HOME/.local/share/opencode:/home/node/.local/share/opencode \
+    -v $HOME/.config/opencode:/home/node/.config/opencode \
+    -v $HOME/.opencode:/home/node/.opencode \
+    -v $(pwd):/app:rw \
+    open-code $@"
+}
+
+function czai() {
+  local PROJ="$(basename "$(pwd)")"
+  local NAME="claude-zai-${PROJ}"
+  docker rm -f "$NAME" 2>/dev/null || true
+  eval "$(__ai_container_launcher) --rm --tty --interactive \
+    --name \"$NAME\" \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v ${HOME}/.claude.json:/home/node/.claude.json:rw \
+    -v ${HOME}/.claude:/home/node/.claude:rw \
+    -v $(pwd):/app:rw \
+    -e ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic \
+    -e ANTHROPIC_AUTH_TOKEN=TOKEN \
+    -e API_TIMEOUT_MS=3000000 \
+    -e CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+    -e ANTHROPIC_DEFAULT_HAIKU_MODEL=glm-4.7-flash \
+    -e ANTHROPIC_DEFAULT_SONNET_MODEL=glm-4.7 \
+    -e ANTHROPIC_DEFAULT_OPUS_MODEL=glm-4.7 \
+    claude-code $@"
 }
 ```
 

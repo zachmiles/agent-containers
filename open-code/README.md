@@ -28,8 +28,12 @@ extending the `LOCAL_TOOLS` list in the top-level `Makefile`.
 PROJ="$(basename "$(pwd)")"
 NAME="open-code-${PROJ}"
 
+# Remove any existing container with this name
+docker rm -f "$NAME" 2>/dev/null || true
+
 exec docker run --rm --tty --interactive \
   --name "$NAME" \
+  -v /etc/localtime:/etc/localtime:ro \
   --add-host=host.docker.internal:host-gateway \
   -v "$HOME/.local/state/opencode:/home/node/.local/state/opencode" \
   -v "$HOME/.local/share/opencode:/home/node/.local/share/opencode" \
