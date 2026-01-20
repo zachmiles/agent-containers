@@ -53,7 +53,7 @@ Run the container:
 ```bash
 #!/usr/bin/env bash
 
-PROJ="$(basename "$(pwd)")"
+PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
 NAME="claude-code-${PROJ}"
 
 # Remove any existing container with this name
@@ -76,7 +76,7 @@ or use the `claude` CLI to change and persist settings and what not just run:
 ```bash
 #!/usr/bin/env bash
 
-PROJ="$(basename "$(pwd)")"
+PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
 NAME="claude-code-shell-${PROJ}"
 
 # Remove any existing container with this name
@@ -87,7 +87,7 @@ docker run -it --rm \
   -v /etc/localtime:/etc/localtime:ro \
   -v ${HOME}/.claude.json:/home/node/.claude.json:rw \
   -v ${HOME}/.claude:/home/node/.claude:rw \
-  -v $(pwd):/app:rw \
+  -v "$(pwd)":/app:rw \
   claude-code \
   bash
 ```
@@ -99,7 +99,7 @@ To run Claude Code with Z.AI as the backend:
 ```bash
 #!/usr/bin/env bash
 
-PROJ="$(basename "$(pwd)")"
+PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
 NAME="claude-zai-${PROJ}"
 
 # Remove any existing container with this name
@@ -110,7 +110,7 @@ docker run -it --rm \
   -v /etc/localtime:/etc/localtime:ro \
   -v ${HOME}/.claude.json:/home/node/.claude.json:rw \
   -v ${HOME}/.claude:/home/node/.claude:rw \
-  -v $(pwd):/app:rw \
+  -v "$(pwd)":/app:rw \
   -e ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic \
   -e ANTHROPIC_AUTH_TOKEN=TOKEN \
   -e API_TIMEOUT_MS=3000000 \

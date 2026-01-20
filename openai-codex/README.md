@@ -45,7 +45,7 @@ launching these containers.
 ```bash
 #!/usr/bin/env bash
 
-PROJ="$(basename "$(pwd)")"
+PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
 NAME="openai-codex-${PROJ}"
 
 # Remove any existing container with this name
@@ -56,7 +56,7 @@ docker run -it --rm \
   -v /etc/localtime:/etc/localtime:ro \
   -e OPENAI_API_KEY \
   -v ${HOME}/.codex:/home/node/.codex:rw \
-  -v $(pwd):/app:rw \
+  -v "$(pwd)":/app:rw \
   openai-codex
 ```
 

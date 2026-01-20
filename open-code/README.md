@@ -25,7 +25,7 @@ extending the `LOCAL_TOOLS` list in the top-level `Makefile`.
 ```bash
 #!/usr/bin/env bash
 
-PROJ="$(basename "$(pwd)")"
+PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
 NAME="open-code-${PROJ}"
 
 # Remove any existing container with this name
@@ -38,7 +38,7 @@ exec docker run --rm --tty --interactive \
   -v "$HOME/.local/state/opencode:/home/node/.local/state/opencode" \
   -v "$HOME/.local/share/opencode:/home/node/.local/share/opencode" \
   -v "$HOME/.config/opencode:/home/node/.config/opencode" \
-  -v "$(pwd):/app:rw" \
+  -v "$(pwd)":/app:rw \
   open-code "$@"
 ```
 

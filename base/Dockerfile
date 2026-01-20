@@ -51,6 +51,9 @@ RUN mkdir -p /home/node/.npm-global && \
 RUN npm install -g agent-browser && \
   agent-browser install
 
+# Install glob-cli (provides 'glob' command for pattern matching)
+RUN npm install -g glob-cli
+
 # 6. Bash Configuration
 # Add the path export to bashrc so interactive shells pick it up
 RUN echo "export PATH=${NPM_CONFIG_PREFIX}/bin:${BUN_INSTALL}/bin:\$PATH" >> /home/node/.bashrc

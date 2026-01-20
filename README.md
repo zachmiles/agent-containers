@@ -100,36 +100,38 @@ function __ai_container_launcher() {
 }
 
 function cclaude() {
-  local PROJ="$(basename "$(pwd)")"
+  local PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
   local NAME="claude-code-${PROJ}"
   docker rm -f "$NAME" 2>/dev/null || true
-  eval "$(__ai_container_launcher) --rm --tty --interactive \
+  local CMD="$(__ai_container_launcher) --rm --tty --interactive \
     --name \"$NAME\" \
     -v /etc/localtime:/etc/localtime:ro \
     -v ${HOME}/.claude.json:/home/node/.claude.json:rw \
     -v ${HOME}/.claude:/home/node/.claude:rw \
-    -v $(pwd):/app:rw \
-    claude-code $@"
+    -v \"$(pwd)\":/app:rw \
+    claude-code"
+  eval "$CMD \"\$@\""
 }
 
 function ccodex() {
-  local PROJ="$(basename "$(pwd)")"
+  local PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
   local NAME="openai-codex-${PROJ}"
   docker rm -f "$NAME" 2>/dev/null || true
-  eval "$(__ai_container_launcher) --rm --tty --interactive \
+  local CMD="$(__ai_container_launcher) --rm --tty --interactive \
     --name \"$NAME\" \
     -v /etc/localtime:/etc/localtime:ro \
     -e OPENAI_API_KEY \
     -v ${HOME}/.codex:/home/node/.codex:rw \
-    -v $(pwd):/app:rw \
-    openai-codex $@"
+    -v \"$(pwd)\":/app:rw \
+    openai-codex"
+  eval "$CMD \"\$@\""
 }
 
 function copencode() {
-  local PROJ="$(basename "$(pwd)")"
+  local PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
   local NAME="opencode-${PROJ}"
   docker rm -f "$NAME" 2>/dev/null || true
-  eval "$(__ai_container_launcher) --rm --tty --interactive \
+  local CMD="$(__ai_container_launcher) --rm --tty --interactive \
     --name \"$NAME\" \
     -v /etc/localtime:/etc/localtime:ro \
     --add-host=host.docker.internal:host-gateway \
@@ -137,20 +139,21 @@ function copencode() {
     -v $HOME/.local/share/opencode:/home/node/.local/share/opencode \
     -v $HOME/.config/opencode:/home/node/.config/opencode \
     -v $HOME/.opencode:/home/node/.opencode \
-    -v $(pwd):/app:rw \
-    open-code $@"
+    -v \"$(pwd)\":/app:rw \
+    open-code"
+  eval "$CMD \"\$@\""
 }
 
 function czai() {
-  local PROJ="$(basename "$(pwd)")"
+  local PROJ="$(basename "$(pwd)" | sed 's/[[:space:]]/-/g')"
   local NAME="claude-zai-${PROJ}"
   docker rm -f "$NAME" 2>/dev/null || true
-  eval "$(__ai_container_launcher) --rm --tty --interactive \
+  local CMD="$(__ai_container_launcher) --rm --tty --interactive \
     --name \"$NAME\" \
     -v /etc/localtime:/etc/localtime:ro \
     -v ${HOME}/.claude.json:/home/node/.claude.json:rw \
     -v ${HOME}/.claude:/home/node/.claude:rw \
-    -v $(pwd):/app:rw \
+    -v \"$(pwd)\":/app:rw \
     -e ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic \
     -e ANTHROPIC_AUTH_TOKEN=TOKEN \
     -e API_TIMEOUT_MS=3000000 \
@@ -158,7 +161,8 @@ function czai() {
     -e ANTHROPIC_DEFAULT_HAIKU_MODEL=glm-4.7-flash \
     -e ANTHROPIC_DEFAULT_SONNET_MODEL=glm-4.7 \
     -e ANTHROPIC_DEFAULT_OPUS_MODEL=glm-4.7 \
-    claude-code $@"
+    claude-code"
+  eval "$CMD \"\$@\""
 }
 ```
 
