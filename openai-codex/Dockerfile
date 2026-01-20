@@ -21,4 +21,4 @@ RUN echo "" && \
   echo "\e[0m" && \
   echo ""
 
-CMD ["codex", "--approval-mode", "auto-edit"]
+CMD ["codex", "--yolo"]

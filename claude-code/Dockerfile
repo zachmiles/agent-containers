@@ -12,6 +12,17 @@ FROM agent-base
 # We must use --chown to ensure the node user owns the copied files
 COPY --from=builder --chown=node:node /home/node/.npm-global /home/node/.npm-global
 
+# Create placeholder file for .claude.json so Docker binds it as a file, not a folder
+RUN touch /home/node/.claude.json && chown node:node /home/node/.claude.json
+
+# Create .local/bin directory and symlink claude to satisfy native install method check
+RUN mkdir -p /home/node/.local/bin && \
+    chown -R node:node /home/node/.local && \
+    ln -s /home/node/.npm-global/bin/claude /home/node/.local/bin/claude
+
+# Add .local/bin to PATH for native install method
+ENV PATH=/home/node/.local/bin:$PATH
+
 # Display version information
 RUN echo "" && \
   echo "\e[34m=================================================================\e[0m" && \
@@ -21,4 +32,4 @@ RUN echo "" && \
   echo "\e[0m" && \
   echo ""
 
-CMD ["claude"]
+CMD ["claude", "--dangerously-skip-permissions"]
